@@ -1,5 +1,6 @@
 const User = require("../models/userSchema");
 const bcrypt = require("bcrypt");
+const generateToken = require("../configs/JWTtoken");
 
 // Register User Api
 const registerUser = async (req, res) => {
@@ -58,6 +59,7 @@ const userLogin = async (req, res) => {
       online: userFound.online,
       admin: userFound.admin,
       createdAt: userFound.createdAt,
+      token: generateToken(userFound._id),
     });
   } else {
     res.status(401);
@@ -84,10 +86,47 @@ const userLogout = async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 };
+// createCollection Api
+const createCollection = async (req, res) => {
+  try {
+    const { theme, name, description, image } = req.body;
+
+    if (!theme || !name || !description) {
+      return res
+        .status(400)
+        .json({ message: "Необходимо заполнить все обязательные поля" });
+    }
+
+    const userId = req.user.id;
+
+    const newCollection = {
+      theme,
+      name,
+      description,
+      image,
+      items: [],
+      comments: [],
+      likes: [],
+      user: userId,
+    };
+
+    const user = await User.findById(userId);
+    user.collections.push(newCollection);
+    await user.save();
+
+    res.status(201).json(newCollection);
+  } catch (error) {
+    console.error("Ошибка при создании коллекции:", error);
+    res
+      .status(500)
+      .json({ message: "Произошла ошибка при создании коллекции" });
+  }
+};
 
 module.exports = {
   registerUser,
   getUsers,
   userLogin,
   userLogout,
+  createCollection,
 };

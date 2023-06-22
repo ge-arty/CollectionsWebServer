@@ -5,7 +5,7 @@ const authRoutes = require("./router/router.js");
 // Set up Express.js app
 const app = express();
 app.use(express.json());
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 // Connecting to MongoDB database
 dbConnect()
