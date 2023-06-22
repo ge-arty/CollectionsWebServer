@@ -8,11 +8,11 @@ const cors = require("cors");
 // Set up Express.js app
 const app = express();
 app.use(express.json());
-const PORT = process.env.PORT;
 app.use(cors());
 app.use(notFound);
 app.use(errorHandler);
 app.use("/", authRoutes);
+const PORT = process.env.PORT;
 
 // Connecting to MongoDB database
 dbConnect()
