@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-const dbUrl =
-  "mongodb+srv://georgearutinyan:Giorgi98@cluster0.w9bgwzb.mongodb.net/?retryWrites=true&w=majority" ||
-  process.env.MONGODB;
+const dbUrl = process.env.MONGODB;
 
 const dbConnect = async () => {
   try {
