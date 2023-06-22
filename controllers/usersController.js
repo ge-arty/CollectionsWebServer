@@ -1,5 +1,5 @@
 const User = require("../models/userSchema");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const generateToken = require("../configs/JWTtoken");
 
 // Register User Api
