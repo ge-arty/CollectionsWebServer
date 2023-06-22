@@ -4,8 +4,10 @@
   "description": "Backend for Collections Web App",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./app.js"
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "\"npm run server\" \"/client/npm start\""
   },
   "author": "George Arutinyan",
   "license": "ISC",
