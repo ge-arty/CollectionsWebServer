@@ -1,6 +1,7 @@
 const User = require("../models/userSchema");
 const bcrypt = require("bcryptjs");
 const expressAsyncHandler = require("express-async-handler");
+const validateMongoId = require("../utils/validateMongoId");
 const generateToken = require("../configs/JWTtoken");
 
 // Register User Api
@@ -81,19 +82,19 @@ const userLogin = expressAsyncHandler(async (req, res) => {
 
 // Logout Api
 const userLogout = expressAsyncHandler(async (req, res) => {
-  const id = req.body;
-  if (id) {
-    try {
-      await User.findByIdAndUpdate(id, { online: false });
-      return res.json({ message: "Logged out successfully" });
-    } catch (error) {
-      console.error("Error updating online status:", error);
-      return res.status(500).json({ error: "Server error" });
-    }
-  } else {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
+  const idString = req.params.id;
+  var ObjectId = mongoose.Types.ObjectId;
+  const _id = new ObjectId(idString);
+  validateMongoId(_id);
+  const { isBlocked } = req.body;
+  const userOff = await User.findByIdAndUpdate(
+    _id,
+    { isBlocked },
+    { new: true, runValidators: true }
+  );
+  res.json(userOff);
 });
+
 // createCollection Api
 const createCollection = expressAsyncHandler(async (req, res) => {
   try {

@@ -17,7 +17,7 @@ authRoutes.get("/users", getUsers);
 // User Login
 authRoutes.post("/login", userLogin);
 // User Logout
-authRoutes.put("/logout", jwtMiddleware, userLogout);
+authRoutes.put("/logout/:id", jwtMiddleware, userLogout);
 // Create User collection
 authRoutes.post("/createCollection", jwtMiddleware, createCollection);
 
