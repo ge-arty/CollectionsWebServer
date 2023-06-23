@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const expressAsyncHandler = require("express-async-handler");
 const validateMongoId = require("../utils/validateMongoId");
 const generateToken = require("../configs/JWTtoken");
+const mongoose = require("mongoose");
 
 // Register User Api
 const registerUser = expressAsyncHandler(async (req, res) => {
