@@ -4,6 +4,7 @@ const {
   userLogin,
   userLogout,
   createCollection,
+  getUser,
 } = require("../controllers/usersController");
 const jwtMiddleware = require("../middlewares/jwtMiddleware");
 const express = require("express");
@@ -12,8 +13,10 @@ const authRoutes = express.Router();
 
 // Register route
 authRoutes.post("/register", registerUser);
-// GetUsers route
+// Get All Users route
 authRoutes.get("/users", getUsers);
+// Get User route
+authRoutes.get("/user/:id", jwtMiddleware, getUser);
 // User Login
 authRoutes.post("/login", userLogin);
 // User Logout

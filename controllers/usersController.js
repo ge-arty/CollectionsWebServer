@@ -5,7 +5,7 @@ const validateMongoId = require("../utils/validateMongoId");
 const generateToken = require("../configs/JWTtoken");
 const mongoose = require("mongoose");
 
-// Register User Api
+// Register User
 const registerUser = expressAsyncHandler(async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
   const userExist = await User.findOne({ email });
@@ -30,7 +30,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// Get Users Api
+// Get All Users
 const getUsers = expressAsyncHandler(async (req, res) => {
   try {
     const allUsers = await User.find({});
@@ -40,7 +40,19 @@ const getUsers = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// Login Api
+// Get User By Id
+const getUser = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    const myProfile = await User.findById(id);
+    res.json(myProfile);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+// Login
 const userLogin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
@@ -81,7 +93,7 @@ const userLogin = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// Logout Api
+// Logout
 const userLogout = expressAsyncHandler(async (req, res) => {
   const idString = req.params.id;
   var ObjectId = mongoose.Types.ObjectId;
@@ -96,7 +108,7 @@ const userLogout = expressAsyncHandler(async (req, res) => {
   res.json(userOff);
 });
 
-// createCollection Api
+// createCollection
 const createCollection = expressAsyncHandler(async (req, res) => {
   try {
     const { theme, name, description, image } = req.body;
@@ -136,6 +148,7 @@ const createCollection = expressAsyncHandler(async (req, res) => {
 module.exports = {
   registerUser,
   getUsers,
+  getUser,
   userLogin,
   userLogout,
   createCollection,
