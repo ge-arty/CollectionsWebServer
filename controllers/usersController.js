@@ -51,6 +51,13 @@ const userLogin = async (req, res) => {
     if (isPasswordMatched) {
       userFound.online = true;
       await userFound.save();
+
+      // Generating Token
+      const token = generateToken(userFound._id);
+
+      // Cookie HttpOnly
+      res.cookie("token", token, { httpOnly: true });
+
       res.json({
         _id: userFound._id,
         firstName: userFound.firstName,
@@ -60,7 +67,7 @@ const userLogin = async (req, res) => {
         online: userFound.online,
         admin: userFound.admin,
         createdAt: userFound.createdAt,
-        token: generateToken(userFound._id),
+        token: token,
       });
     } else {
       res.status(401);
