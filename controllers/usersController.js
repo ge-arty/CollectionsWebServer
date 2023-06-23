@@ -81,19 +81,14 @@ const userLogin = async (req, res) => {
 // Logout Api
 const userLogout = async (req, res) => {
   if (req.user) {
-    // Update the user's online status to false
-    User.findByIdAndUpdate(req.user._id, { online: false }, (err, user) => {
-      if (err) {
-        console.error("Error updating online status:", err);
-        // Handle the error accordingly
-        return res.status(500).json({ error: "Server error" });
-      }
-      // Logout the user from the session
-      req.logout();
+    try {
+      await User.findByIdAndUpdate(req.user._id, { online: false });
       return res.json({ message: "Logged out successfully" });
-    });
+    } catch (error) {
+      console.error("Error updating online status:", error);
+      return res.status(500).json({ error: "Server error" });
+    }
   } else {
-    // User is not logged in
     return res.status(401).json({ error: "Unauthorized" });
   }
 };
