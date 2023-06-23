@@ -87,10 +87,10 @@ const userLogout = expressAsyncHandler(async (req, res) => {
   var ObjectId = mongoose.Types.ObjectId;
   const _id = new ObjectId(idString);
   validateMongoId(_id);
-  const { isBlocked } = req.body;
+  const { online } = req.body;
   const userOff = await User.findByIdAndUpdate(
     _id,
-    { isBlocked },
+    { online },
     { new: true, runValidators: true }
   );
   res.json(userOff);
