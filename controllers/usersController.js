@@ -41,29 +41,33 @@ const getUsers = async (req, res) => {
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
-  const userFound = await User.findOne({ email });
-  if (!userFound) {
-    res.status(401);
-    throw new Error("Account doesn't exist");
-  }
-  const isPasswordMatched = await userFound.isPasswordMatched(password);
-  if (isPasswordMatched) {
-    userFound.online = true;
-    await userFound.save();
-    res.json({
-      _id: userFound._id,
-      firstName: userFound.firstName,
-      lastName: userFound.lastName,
-      email: userFound.email,
-      password: userFound.password,
-      online: userFound.online,
-      admin: userFound.admin,
-      createdAt: userFound.createdAt,
-      token: generateToken(userFound._id),
-    });
-  } else {
-    res.status(401);
-    throw new Error("Login failed, incorrect password");
+  try {
+    const userFound = await User.findOne({ email });
+    if (!userFound) {
+      res.status(401);
+      throw new Error("Account doesn't exist");
+    }
+    const isPasswordMatched = await userFound.isPasswordMatched(password);
+    if (isPasswordMatched) {
+      userFound.online = true;
+      await userFound.save();
+      res.json({
+        _id: userFound._id,
+        firstName: userFound.firstName,
+        lastName: userFound.lastName,
+        email: userFound.email,
+        password: userFound.password,
+        online: userFound.online,
+        admin: userFound.admin,
+        createdAt: userFound.createdAt,
+        token: generateToken(userFound._id),
+      });
+    } else {
+      res.status(401);
+      throw new Error("Login failed, incorrect password");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
