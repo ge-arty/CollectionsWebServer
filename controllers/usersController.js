@@ -1,9 +1,10 @@
 const User = require("../models/userSchema");
 const bcrypt = require("bcryptjs");
+const expressAsyncHandler = require("express-async-handler");
 const generateToken = require("../configs/JWTtoken");
 
 // Register User Api
-const registerUser = async (req, res) => {
+const registerUser = expressAsyncHandler(async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
   const userExist = await User.findOne({ email });
   const message = userExist ? "User already exists" : "Registered successfully";
@@ -25,20 +26,20 @@ const registerUser = async (req, res) => {
   } else {
     res.status(400).json({ current, message });
   }
-};
+});
 
 // Get Users Api
-const getUsers = async (req, res) => {
+const getUsers = expressAsyncHandler(async (req, res) => {
   try {
     const allUsers = await User.find({});
     res.json(allUsers);
   } catch (error) {
     res.json(error);
   }
-};
+});
 
 // Login Api
-const userLogin = async (req, res) => {
+const userLogin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
   try {
@@ -76,13 +77,14 @@ const userLogin = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+});
 
 // Logout Api
-const userLogout = async (req, res) => {
-  if (req.user) {
+const userLogout = expressAsyncHandler(async (req, res) => {
+  const id = req.body;
+  if (id) {
     try {
-      await User.findByIdAndUpdate(req.user._id, { online: false });
+      await User.findByIdAndUpdate(id, { online: false });
       return res.json({ message: "Logged out successfully" });
     } catch (error) {
       console.error("Error updating online status:", error);
@@ -91,9 +93,9 @@ const userLogout = async (req, res) => {
   } else {
     return res.status(401).json({ error: "Unauthorized" });
   }
-};
+});
 // createCollection Api
-const createCollection = async (req, res) => {
+const createCollection = expressAsyncHandler(async (req, res) => {
   try {
     const { theme, name, description, image } = req.body;
 
@@ -127,7 +129,7 @@ const createCollection = async (req, res) => {
       .status(500)
       .json({ message: "Произошла ошибка при создании коллекции" });
   }
-};
+});
 
 module.exports = {
   registerUser,
