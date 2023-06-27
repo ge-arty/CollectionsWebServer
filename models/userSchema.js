@@ -6,20 +6,11 @@ const customFieldSchema = new mongoose.Schema({
   value: mongoose.Schema.Types.Mixed,
 });
 
-const collectionItemSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  customFields: [customFieldSchema],
-});
-
 const collectionSchema = new mongoose.Schema({
   theme: {
     type: String,
     enum: ["Books", "Signs", "Silverware", "Others"],
+    required: true,
   },
   name: String,
   description: String,
@@ -28,7 +19,7 @@ const collectionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  items: [collectionItemSchema],
+  customFields: [customFieldSchema],
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
