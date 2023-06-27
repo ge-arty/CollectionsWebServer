@@ -111,37 +111,20 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 // createCollection
 const createCollection = expressAsyncHandler(async (req, res) => {
   try {
-    const { theme, name, description, image } = req.body;
-
-    if (!theme || !name || !description) {
-      return res
-        .status(400)
-        .json({ message: "Необходимо заполнить все обязательные поля" });
+    const { userId, collectionData } = req.body;
+    if (!userId || !collectionData) {
+      return res.status(400).json({ error: "Not enough info about User!" });
     }
-
-    const userId = req.user.id;
-
-    const newCollection = {
-      theme,
-      name,
-      description,
-      image,
-      items: [],
-      comments: [],
-      likes: [],
-      user: userId,
-    };
-
     const user = await User.findById(userId);
-    user.collections.push(newCollection);
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+    user.collections.push(collectionData);
     await user.save();
-
-    res.status(201).json(newCollection);
+    return res.status(201).json({ message: "Collection has been created!" });
   } catch (error) {
-    console.error("Ошибка при создании коллекции:", error);
-    res
-      .status(500)
-      .json({ message: "Произошла ошибка при создании коллекции" });
+    console.error("Failed to create Collection!:", error);
+    return res.status(500).json({ error: "Server internal error!" });
   }
 });
 
