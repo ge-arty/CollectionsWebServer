@@ -111,19 +111,16 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 // createCollection
 const createCollection = expressAsyncHandler(async (req, res) => {
   try {
-    const { userId, collectionData } = req.body;
-    console.log(req.body);
-    console.log(!collectionData);
-    console.log(collectionData);
-    // if (!userId || !collectionData) {
-    //   return res.status(400).json({ error: "Not enough info about User!" });
-    // }
+    const { userId, itemData } = req.body;
+    if (!userId || !itemData) {
+      return res.status(400).json({ error: "Not enough info about User!" });
+    }
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    user.collections.push(collectionData);
+    user.collections.push(itemData);
     await user.save();
     return res.status(201).json({ message: "Collection has been created!" });
   } catch (error) {
