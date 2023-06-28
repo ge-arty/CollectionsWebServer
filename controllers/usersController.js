@@ -112,6 +112,7 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 const createCollection = expressAsyncHandler(async (req, res) => {
   try {
     const { userId, collectionData } = req.body;
+    console.log(req.body);
     console.log(!collectionData);
     console.log(collectionData);
     // if (!userId || !collectionData) {
