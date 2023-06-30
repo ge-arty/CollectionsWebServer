@@ -125,7 +125,7 @@ const createCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    const itemId = uuidv4(); // Генерируем уникальный идентификатор
+    const itemId = uuidv4();
 
     const cloudinaryResponse = await cloudinary.uploader.upload(image.path, {
       public_id: itemId,
