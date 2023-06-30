@@ -113,9 +113,9 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 // createCollection
 const createCollection = expressAsyncHandler(async (req, res) => {
   try {
-    const { userId, theme, name, description, customFields } = req.query;
-    const image = req.file;
-    console.log(req.query, req.file);
+    const { userId, theme, name, description, customFields } = req.body;
+    const image = req.files.image;
+
     if (!userId || !theme || !name || !image) {
       return res.status(400).json({ error: "Missing required data!" });
     }
