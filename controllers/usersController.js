@@ -4,6 +4,7 @@ const expressAsyncHandler = require("express-async-handler");
 const validateMongoId = require("../utils/validateMongoId");
 const generateToken = require("../configs/JWTtoken");
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
 
 // Register User
 const registerUser = expressAsyncHandler(async (req, res) => {
@@ -111,20 +112,35 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 // createCollection
 const createCollection = expressAsyncHandler(async (req, res) => {
   try {
-    const { userId, itemData } = req.body;
-    if (!userId || !itemData) {
-      return res.status(400).json({ error: "Not enough info about User!" });
+    const { userId, theme, name, description, customFields } = req.query;
+    const image = req.file;
+
+    if (!userId || !theme || !name || !image) {
+      return res.status(400).json({ error: "Missing required data!" });
     }
+
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    user.collections.push(itemData);
+    const cloudinaryResponse = await cloudinary.uploader.upload(image.path);
+    const imageUrl = cloudinaryResponse.secure_url;
+
+    const newItem = {
+      theme,
+      name,
+      description,
+      image: imageUrl,
+      customFields: JSON.parse(customFields),
+    };
+
+    user.collections.push(newItem);
     await user.save();
+
     return res.status(201).json({ message: "Collection has been created!" });
   } catch (error) {
-    console.error("Failed to create Collection!:", error);
+    console.error("Failed to create Collection:", error);
     return res.status(500).json({ error: "Server internal error!" });
   }
 });
