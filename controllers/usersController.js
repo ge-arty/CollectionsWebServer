@@ -115,7 +115,7 @@ const createCollection = expressAsyncHandler(async (req, res) => {
   try {
     const { userId, theme, name, description, customFields } = req.query;
     const image = req.file;
-
+    console.log(req.query, req.file);
     if (!userId || !theme || !name || !image) {
       return res.status(400).json({ error: "Missing required data!" });
     }
