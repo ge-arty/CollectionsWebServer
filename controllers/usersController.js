@@ -5,6 +5,7 @@ const validateMongoId = require("../utils/validateMongoId");
 const generateToken = require("../configs/JWTtoken");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
+const { v4: uuidv4 } = require("uuid");
 
 // Register User
 const registerUser = expressAsyncHandler(async (req, res) => {
@@ -124,10 +125,17 @@ const createCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    const cloudinaryResponse = await cloudinary.uploader.upload(image.path);
+    const itemId = uuidv4(); // Генерируем уникальный идентификатор
+
+    const cloudinaryResponse = await cloudinary.uploader.upload(image.path, {
+      public_id: itemId,
+      tags: [user._id],
+      metadata: { userId: user._id },
+    });
     const imageUrl = cloudinaryResponse.secure_url;
 
     const newItem = {
+      _id: itemId,
       theme,
       name,
       description,
