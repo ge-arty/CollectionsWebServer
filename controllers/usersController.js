@@ -113,9 +113,10 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 createCollection = expressAsyncHandler(async (req, res) => {
   try {
     console.log(req.body);
-    const { userId, formData } = req.body;
-    console.log(userId, formData);
-    if (!userId || !formData) {
+    const { userId, itemData } = req.body;
+    console.log(req.body.file);
+    console.log(userId, itemData);
+    if (!userId || !itemData) {
       return res.status(400).json({ error: "Not enough info about User!" });
     }
     const user = await User.findById(userId);
@@ -123,11 +124,11 @@ createCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    const result = await cloudinary.uploader.upload(formData.image.path);
+    const result = await cloudinary.uploader.upload(itemData.image.path);
 
-    formData.image = result.secure_url;
+    itemData.image = result.secure_url;
 
-    user.collections.push(formData);
+    user.collections.push(itemData);
     await user.save();
     return res.status(201).json({ message: "Collection has been created!" });
   } catch (error) {
