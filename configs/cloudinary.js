@@ -1,10 +1,15 @@
-// Require the cloudinary library
+require("dontenv").config();
 const cloudinary = require("cloudinary").v2;
 
-// Return "https" URLs by setting secure: true
 cloudinary.config({
-  secure: true,
+  cloud_name: "dbfpdhvwk",
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Log the configuration
-console.log(cloudinary.config());
+const upload = (image) => {
+  cloudinary.uploader.upload(image).then((result) => {
+    console.log(result);
+  });
+};
+export default upload;
