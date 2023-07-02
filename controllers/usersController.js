@@ -113,7 +113,6 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 const createCollection = expressAsyncHandler(async (req, res) => {
   try {
     const { userId, itemData } = req.body;
-    console.log(userId, itemData);
     if (!userId || !itemData) {
       return res.status(400).json({ error: "Not enough info about User!" });
     }
@@ -121,15 +120,11 @@ const createCollection = expressAsyncHandler(async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found!" });
     }
-
     const result = await upload(itemData.image);
-
     if (!result || !result.secure_url) {
       return res.status(500).json({ error: "Failed to upload image!" });
     }
-
     itemData.image = result.secure_url;
-
     user.collections.push(itemData);
     await user.save();
     return res.status(201).json({ message: "Collection has been created!" });
