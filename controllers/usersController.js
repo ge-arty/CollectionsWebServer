@@ -122,7 +122,7 @@ const createCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
     const result = upload(itemData.image);
-    console.log(result);
+    itemData.image = result.secure_url;
 
     user.collections.push(itemData);
     await user.save();
