@@ -4,6 +4,7 @@ const expressAsyncHandler = require("express-async-handler");
 const validateMongoId = require("../utils/validateMongoId");
 const generateToken = require("../configs/JWTtoken");
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
 
 // Register User
 const registerUser = expressAsyncHandler(async (req, res) => {
@@ -111,8 +112,9 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 // createCollection
 createCollection = expressAsyncHandler(async (req, res) => {
   try {
-    const { userId, itemData } = req.body;
-    if (!userId || !itemData) {
+    const { userId, formData } = req.body;
+    console.log(userId, formData);
+    if (!userId || !formData) {
       return res.status(400).json({ error: "Not enough info about User!" });
     }
     const user = await User.findById(userId);
@@ -120,7 +122,11 @@ createCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    user.collections.push(itemData);
+    const result = await cloudinary.uploader.upload(formData.image.path); // Assuming formData.image is the file object
+
+    formData.image = result.secure_url;
+
+    user.collections.push(formData);
     await user.save();
     return res.status(201).json({ message: "Collection has been created!" });
   } catch (error) {
