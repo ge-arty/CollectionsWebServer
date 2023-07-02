@@ -4,7 +4,7 @@ const expressAsyncHandler = require("express-async-handler");
 const validateMongoId = require("../utils/validateMongoId");
 const generateToken = require("../configs/JWTtoken");
 const mongoose = require("mongoose");
-import upload from "../configs/cloudinary";
+const upload = require("../configs/cloudinary");
 
 // Register User
 const registerUser = expressAsyncHandler(async (req, res) => {
@@ -110,7 +110,7 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 });
 
 // createCollection
-createCollection = expressAsyncHandler(async (req, res) => {
+const createCollection = expressAsyncHandler(async (req, res) => {
   try {
     const { userId, itemData } = req.body;
     console.log(userId, itemData);

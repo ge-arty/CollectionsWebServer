@@ -12,4 +12,4 @@ const upload = (image) => {
     console.log(result);
   });
 };
-export default upload;
+module.exports = upload;
