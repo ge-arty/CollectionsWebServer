@@ -112,10 +112,8 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 // createCollection
 createCollection = expressAsyncHandler(async (req, res) => {
   try {
-    console.log(req.body);
     const { userId, itemData } = req.body;
-    console.log(req.body.file);
-    console.log(userId, itemData);
+
     if (!userId || !itemData) {
       return res.status(400).json({ error: "Not enough info about User!" });
     }
