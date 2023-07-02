@@ -112,6 +112,7 @@ const userLogout = expressAsyncHandler(async (req, res) => {
 // createCollection
 createCollection = expressAsyncHandler(async (req, res) => {
   try {
+    console.log(req.body);
     const { userId, formData } = req.body;
     console.log(userId, formData);
     if (!userId || !formData) {
@@ -122,7 +123,7 @@ createCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    const result = await cloudinary.uploader.upload(formData.image.path); // Assuming formData.image is the file object
+    const result = await cloudinary.uploader.upload(formData.image.path);
 
     formData.image = result.secure_url;
 
