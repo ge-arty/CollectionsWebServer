@@ -123,6 +123,7 @@ createCollection = expressAsyncHandler(async (req, res) => {
     }
 
     const result = await cloudinary.uploader.upload(itemData.image.path);
+    console.log(result);
 
     itemData.image = result.secure_url;
 
