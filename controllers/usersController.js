@@ -121,11 +121,13 @@ createCollection = expressAsyncHandler(async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found!" });
     }
-
-    const result = await cloudinary.uploader.upload(itemData.image.path);
-    console.log(cloudinary);
-    console.log(result);
-
+    const options = {
+      use_filename: true,
+      unique_filename: false,
+      overwrite: true,
+    };
+    // Upload the image
+    const result = await cloudinary.uploader.upload(itemData.image, options);
     itemData.image = result.secure_url;
 
     user.collections.push(itemData);
