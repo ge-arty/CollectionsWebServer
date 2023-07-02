@@ -8,8 +8,14 @@ cloudinary.config({
 });
 
 const upload = (image) => {
-  cloudinary.uploader.upload(image).then((result) => {
-    console.log(result);
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload(image, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
   });
 };
 module.exports = upload;
