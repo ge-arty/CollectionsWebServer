@@ -15,6 +15,10 @@ const collectionSchema = new mongoose.Schema({
   name: String,
   description: String,
   image: String,
+  manufacturingDate: {
+    type: String,
+  },
+  antique: String,
   createdAt: {
     type: Date,
     default: Date.now,
