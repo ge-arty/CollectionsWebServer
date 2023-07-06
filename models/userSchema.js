@@ -9,7 +9,7 @@ const customFieldSchema = new mongoose.Schema({
 const collectionSchema = new mongoose.Schema({
   theme: {
     type: String,
-    enum: ["Books", "Signs", "Silverware", "Others"],
+    enum: ["Books", "Signs", "Silverware", "Coins", "Others"],
     required: true,
   },
   name: String,
