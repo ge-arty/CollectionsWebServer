@@ -18,7 +18,7 @@ const collectionSchema = new mongoose.Schema({
   manufacturingDate: {
     type: String,
   },
-  antique: String,
+  antique: boolean,
   createdAt: {
     type: Date,
     default: Date.now,
