@@ -7,12 +7,9 @@ const customFieldSchema = new mongoose.Schema({
 });
 const itemSchema = new mongoose.Schema({
   name: String,
-  required: true,
   description: String,
-  required: true,
   date: {
     type: Date,
-    required: true,
   },
   customFields: [customFieldSchema],
 });
