@@ -49,11 +49,7 @@ const collectionSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
+  username: {
     type: String,
     required: true,
   },
