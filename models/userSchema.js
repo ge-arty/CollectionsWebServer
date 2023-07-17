@@ -18,7 +18,6 @@ const collectionSchema = new mongoose.Schema({
   theme: {
     type: String,
     enum: ["Books", "Stamps", "Silverware", "Coins", "Others"],
-    required: true,
   },
   name: String,
   description: String,
@@ -48,15 +47,13 @@ const collectionSchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
   },
   password: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
-    required: true,
+
     unique: true,
   },
   admin: {

@@ -30,28 +30,6 @@ const registerUser = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// Get All Users
-const getAllUsers = expressAsyncHandler(async (req, res) => {
-  try {
-    const allUsers = await User.find({});
-    res.json(allUsers);
-  } catch (error) {
-    res.json(error);
-  }
-});
-
-// Get User By Id
-const getUser = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
-  validateMongoId(id);
-  try {
-    const myProfile = await User.findById(id);
-    res.json(myProfile);
-  } catch (error) {
-    res.json(error);
-  }
-});
-
 // Login
 const userLogin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -90,6 +68,28 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Get All Users
+const getAllUsers = expressAsyncHandler(async (req, res) => {
+  try {
+    const allUsers = await User.find({});
+    res.json(allUsers);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+// Get User By Id
+const getUser = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    const myProfile = await User.findById(id);
+    res.json(myProfile);
+  } catch (error) {
+    res.json(error);
   }
 });
 
