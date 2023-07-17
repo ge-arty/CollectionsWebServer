@@ -8,7 +8,7 @@ const upload = require("../configs/cloudinary");
 
 // Register User
 const registerUser = expressAsyncHandler(async (req, res) => {
-  const { email, firstName, lastName, password } = req.body;
+  const { email, username, password } = req.body;
   const userExist = await User.findOne({ email });
   const message = userExist ? "User already exists" : "Registered successfully";
   const current = !userExist;
@@ -17,8 +17,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await User.create({
-        firstName,
-        lastName,
+        username,
         email,
         password: hashedPassword,
       });
