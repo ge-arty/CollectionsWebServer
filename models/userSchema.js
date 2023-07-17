@@ -15,7 +15,7 @@ const itemSchema = new mongoose.Schema({
 });
 
 const collectionSchema = new mongoose.Schema({
-  theme: {
+  category: {
     type: String,
     enum: ["Books", "Stamps", "Silverware", "Coins", "Others"],
   },

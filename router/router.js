@@ -14,15 +14,18 @@ const authRoutes = express.Router();
 
 // Register route
 authRoutes.post("/register", registerUser);
-// Get All Users route
-authRoutes.get("/users", getAllUsers);
-// Get User route
-authRoutes.get("/user/:id", jwtMiddleware, getUser);
 // User Login
 authRoutes.post("/login", userLogin);
-// User Logout
-authRoutes.put("/logout/:id", jwtMiddleware, userLogout);
+// Get User route
+authRoutes.get("/user/:id", jwtMiddleware, getUser);
+
 // Create User collection
 authRoutes.post("/createCollection", jwtMiddleware, createCollection);
+// -----------------------
+// Get All Users route
+authRoutes.get("/users", getAllUsers);
+
+// User Logout
+authRoutes.put("/logout/:id", jwtMiddleware, userLogout);
 
 module.exports = authRoutes;

@@ -42,7 +42,6 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     }
     const isPasswordMatched = await userFound.isPasswordMatched(password);
     if (isPasswordMatched) {
-      userFound.online = true;
       await userFound.save();
 
       // Generating Token
@@ -50,7 +49,6 @@ const userLogin = expressAsyncHandler(async (req, res) => {
 
       // Cookie HttpOnly
       res.cookie("token", token, { httpOnly: true });
-
       res.json({
         _id: userFound._id,
         firstName: userFound.firstName,
@@ -71,16 +69,6 @@ const userLogin = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// Get All Users
-const getAllUsers = expressAsyncHandler(async (req, res) => {
-  try {
-    const allUsers = await User.find({});
-    res.json(allUsers);
-  } catch (error) {
-    res.json(error);
-  }
-});
-
 // Get User By Id
 const getUser = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -88,6 +76,42 @@ const getUser = expressAsyncHandler(async (req, res) => {
   try {
     const myProfile = await User.findById(id);
     res.json(myProfile);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+// createCollection
+const createCollection = expressAsyncHandler(async (req, res) => {
+  try {
+    const data = req.body;
+    if (!data) {
+      return res.status(400).json({ error: "Not enough info about User!" });
+    }
+    const user = await User.findById(data.userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+    const result = await upload(data.image);
+    if (!result || !result.secure_url) {
+      return res.status(500).json({ error: "Failed to upload image!" });
+    }
+    data.image = result.secure_url;
+    user.collections.push(data);
+    await user.save();
+    return res.status(201).json({ message: "Collection has been created!" });
+  } catch (error) {
+    console.error("Failed to create Collection!:", error);
+    return res.status(500).json({ error: "Server internal error!" });
+  }
+});
+// ------------------------------------------
+
+// Get All Users
+const getAllUsers = expressAsyncHandler(async (req, res) => {
+  try {
+    const allUsers = await User.find({});
+    res.json(allUsers);
   } catch (error) {
     res.json(error);
   }
@@ -106,31 +130,6 @@ const userLogout = expressAsyncHandler(async (req, res) => {
     { new: true, runValidators: true }
   );
   res.json(userOff);
-});
-
-// createCollection
-const createCollection = expressAsyncHandler(async (req, res) => {
-  try {
-    const { userId, itemData } = req.body;
-    if (!userId || !itemData) {
-      return res.status(400).json({ error: "Not enough info about User!" });
-    }
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found!" });
-    }
-    const result = await upload(itemData.image);
-    if (!result || !result.secure_url) {
-      return res.status(500).json({ error: "Failed to upload image!" });
-    }
-    itemData.image = result.secure_url;
-    user.collections.push(itemData);
-    await user.save();
-    return res.status(201).json({ message: "Collection has been created!" });
-  } catch (error) {
-    console.error("Failed to create Collection!:", error);
-    return res.status(500).json({ error: "Server internal error!" });
-  }
 });
 
 module.exports = {
