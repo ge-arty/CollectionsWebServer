@@ -5,6 +5,17 @@ const customFieldSchema = new mongoose.Schema({
   key: String,
   value: mongoose.Schema.Types.Mixed,
 });
+const itemSchema = new mongoose.Schema({
+  name: String,
+  required: true,
+  description: String,
+  required: true,
+  date: {
+    type: Date,
+    required: true,
+  },
+  customFields: [customFieldSchema],
+});
 
 const collectionSchema = new mongoose.Schema({
   theme: {
@@ -18,12 +29,11 @@ const collectionSchema = new mongoose.Schema({
   manufacturingDate: {
     type: String,
   },
-  antique: Boolean,
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  customFields: [customFieldSchema],
+  item: [itemSchema],
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -63,10 +73,6 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-  },
-  online: {
-    type: Boolean,
-    default: false,
   },
   collections: [collectionSchema],
 });
