@@ -99,12 +99,16 @@ const createCollection = expressAsyncHandler(async (req, res) => {
     data.image = result.secure_url;
     user.collections.push(data);
     await user.save();
-    return res.status(201).json({ message: "Collection has been created!" });
+    return res.status(201).json({
+      collection: user.collections[user.collections.length - 1],
+      message: "Collection has been created!",
+    });
   } catch (error) {
     console.error("Failed to create Collection!:", error);
     return res.status(500).json({ error: "Server internal error!" });
   }
 });
+
 // ------------------------------------------
 
 // Get All Users
