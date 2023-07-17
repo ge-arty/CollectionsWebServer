@@ -32,7 +32,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 });
 
 // Get All Users
-const getUsers = expressAsyncHandler(async (req, res) => {
+const getAllUsers = expressAsyncHandler(async (req, res) => {
   try {
     const allUsers = await User.find({});
     res.json(allUsers);
@@ -136,7 +136,7 @@ const createCollection = expressAsyncHandler(async (req, res) => {
 
 module.exports = {
   registerUser,
-  getUsers,
+  getAllUsers,
   getUser,
   userLogin,
   userLogout,
