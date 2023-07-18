@@ -123,15 +123,20 @@ const deleteCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "Collection not found!" });
     }
 
-    collection.remove();
-    await user.save();
+    const remove = async () => {
+      const result = await collection.remove();
+      return result.deletedCount == 1;
+    };
 
-    return res.status(200).json({ message: "Collection has been deleted!" });
+    const success = await remove();
+    if (success) {
+      return res.status(200).json({ message: "Collection has been deleted!" });
+    } else {
+      return res.status(500).json({ error: "Failed to delete collection!" });
+    }
   } catch (error) {
     console.error("Failed to delete Collection:", error);
-    const statusCode = error.statusCode || 500;
-    const errorMsg = error.message || "Server internal error!";
-    return res.status(statusCode).json({ error: errorMsg });
+    return res.status(500).json({ error: "Server internal error!" });
   }
 });
 
