@@ -146,27 +146,12 @@ const getAllUsers = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// Logout
-const userLogout = expressAsyncHandler(async (req, res) => {
-  const idString = req.params.id;
-  var ObjectId = mongoose.Types.ObjectId;
-  const _id = new ObjectId(idString);
-  validateMongoId(_id);
-  const { online } = req.body;
-  const userOff = await User.findByIdAndUpdate(
-    _id,
-    { online },
-    { new: true, runValidators: true }
-  );
-  res.json(userOff);
-});
-
 module.exports = {
   registerUser,
   getAllUsers,
   getUser,
   userLogin,
-  userLogout,
+
   createCollection,
   deleteCollection,
 };
