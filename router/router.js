@@ -6,6 +6,7 @@ const {
   createCollection,
   getUser,
   getAllUsers,
+  deleteCollection,
 } = require("../controllers/usersController");
 const jwtMiddleware = require("../middlewares/jwtMiddleware");
 const express = require("express");
@@ -21,6 +22,9 @@ authRoutes.get("/user/:id", jwtMiddleware, getUser);
 
 // Create User collection
 authRoutes.post("/createCollection", jwtMiddleware, createCollection);
+
+// Remove Collection
+authRoutes.delete("collection/:id", jwtMiddleware, deleteCollection);
 // -----------------------
 // Get All Users route
 authRoutes.get("/users", getAllUsers);

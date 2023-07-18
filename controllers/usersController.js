@@ -108,6 +108,31 @@ const createCollection = expressAsyncHandler(async (req, res) => {
     return res.status(500).json({ error: "Server internal error!" });
   }
 });
+// Remove Collection
+const deleteCollection = expressAsyncHandler(async (req, res) => {
+  try {
+    const collectionId = req.params.id;
+    const ownerId = req.body.ownerId;
+
+    const user = await User.findById(ownerId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+
+    const collection = user.collections.id(collectionId);
+    if (!collection) {
+      return res.status(404).json({ error: "Collection not found!" });
+    }
+
+    collection.remove();
+    await user.save();
+
+    return res.status(200).json({ message: "Collection has been deleted!" });
+  } catch (error) {
+    console.error("Failed to delete Collection:", error);
+    return res.status(500).json({ error: "Server internal error!" });
+  }
+});
 
 // ------------------------------------------
 
@@ -143,4 +168,5 @@ module.exports = {
   userLogin,
   userLogout,
   createCollection,
+  deleteCollection,
 };
