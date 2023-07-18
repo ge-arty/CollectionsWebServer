@@ -118,22 +118,15 @@ const deleteCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    const collection = user.collections.id(id);
-    if (!collection) {
+    const deletedCollection = user.collections.id(id);
+    if (!deletedCollection) {
       return res.status(404).json({ error: "Collection not found!" });
     }
 
-    const remove = async () => {
-      const result = await collection.remove();
-      return result.deletedCount == 1;
-    };
+    deletedCollection.remove();
+    await user.save();
 
-    const success = await remove();
-    if (success) {
-      return res.status(200).json({ message: "Collection has been deleted!" });
-    } else {
-      return res.status(500).json({ error: "Failed to delete collection!" });
-    }
+    return res.status(200).json({ message: "Collection has been deleted!" });
   } catch (error) {
     console.error("Failed to delete Collection:", error);
     return res.status(500).json({ error: "Server internal error!" });
