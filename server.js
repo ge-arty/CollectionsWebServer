@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv").config();
 const dbConnect = require("./configs/dbConnect.js");
 const authRoutes = require("./router/router.js");
+const bodyParser = require("body-parser");
 const cors = require("cors");
 const PORT = process.env.PORT;
 // Set up Express.js app
