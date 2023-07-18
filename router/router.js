@@ -19,7 +19,7 @@ authRoutes.get("/user/:id", jwtMiddleware, getUser);
 // Create User collection
 authRoutes.post("/createCollection", jwtMiddleware, createCollection);
 // Remove Collection
-authRoutes.delete("/collection/:id", deleteCollection);
+authRoutes.delete("/collection/:id", jwtMiddleware, deleteCollection);
 // -----------------------
 
 module.exports = authRoutes;
