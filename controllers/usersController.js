@@ -118,12 +118,12 @@ const deleteCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    const deletedCollection = user.collections.id(id);
-    if (!deletedCollection) {
+    const collection = user.collections.id(id);
+    if (!collection) {
       return res.status(404).json({ error: "Collection not found!" });
     }
 
-    deletedCollection.remove();
+    collection.remove();
     await user.save();
 
     return res.status(200).json({ message: "Collection has been deleted!" });
