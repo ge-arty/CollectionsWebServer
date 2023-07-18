@@ -112,7 +112,7 @@ const createCollection = expressAsyncHandler(async (req, res) => {
 const deleteCollection = expressAsyncHandler(async (req, res) => {
   try {
     const collectionId = req.params.id;
-    const ownerId = req.body.ownerId;
+    const ownerId = req.body;
 
     const user = await User.findById(ownerId);
     if (!user) {
