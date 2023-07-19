@@ -168,20 +168,19 @@ const updateItem = expressAsyncHandler(async (req, res) => {
     }
     const user = await User.findById(data.userId);
     const item = user.collections
-      .flatMap((collection) => collection.item)
-      .id(id);
-    console.log(item);
-
-    if (!item) {
+      .map((collection) => collection.item.id(id))
+      .filter((item) => item !== null);
+    const filteredItem = item[0];
+    if (!filteredItem) {
       return res.status(404).json({ error: "Item not found!" });
     }
-    console.log(item);
-    item.name = data.name || item.name;
-    item.date = data.date || item.date;
-    item.description = data.description || item.description;
+
+    filteredItem.name = data.name || filteredItem.name;
+    filteredItem.date = data.date || filteredItem.date;
+    filteredItem.description = data.description || filteredItem.description;
 
     if (data.customFields && Array.isArray(data.customFields)) {
-      item.customFields = data.customFields;
+      filteredItem.customFields = data.customFields;
     }
 
     // Save the updated item to the database
