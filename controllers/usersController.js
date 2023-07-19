@@ -140,7 +140,7 @@ const createItem = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    const collection = user.collections.id(id);
+    const collection = user.collections._id(id);
 
     if (!collection) {
       return res
