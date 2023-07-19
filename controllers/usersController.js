@@ -92,11 +92,10 @@ const getCollection = expressAsyncHandler(async (req, res) => {
     }, []);
     console.log(allCollections);
     const collection = allCollections.id(id);
-
+    console.log(collection);
     if (!collection) {
       return res.status(404).json({ error: "Collection not found!" });
     }
-    console.log(collection);
 
     res.json({ collection });
   } catch (error) {
