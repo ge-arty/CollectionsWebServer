@@ -140,19 +140,15 @@ const createItem = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    const ObjectId = mongoose.Schema.Types.ObjectId;
-    const collectionId = new ObjectId(id);
-    const foundCollection = user.collections.find(
-      (collection) => collection._id === collectionId
-    );
+    const collection = await User.collections.findById(id);
 
-    if (!foundCollection) {
+    if (!collection) {
       return res
         .status(404)
         .json({ error: "Collection not found in the user's collections!" });
     }
-    console.log(foundCollection);
-    foundCollection.item.push(data);
+    console.log(collection);
+    collection.item.push(data);
 
     await user.save();
     return res.status(201).json({
