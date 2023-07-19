@@ -130,7 +130,7 @@ const deleteCollection = expressAsyncHandler(async (req, res) => {
 // Create Item
 const createItem = expressAsyncHandler(async (req, res) => {
   try {
-    const { collectionId } = req.params;
+    const { id } = req.params;
     console.log(req.params);
     const data = req.body;
     if (!data) {
@@ -141,10 +141,12 @@ const createItem = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
     const foundCollection = user.collections.find(
-      (collection) => collection._id === collectionId
+      (collection) => collection._id === id
     );
     if (!foundCollection) {
-      return res.status(404).json(user.collections);
+      return res
+        .status(404)
+        .json({ error: "Collection not found in the user's collections!" });
     }
 
     foundCollection.item.push(data);
