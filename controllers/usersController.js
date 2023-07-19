@@ -168,8 +168,8 @@ const updateItem = expressAsyncHandler(async (req, res) => {
     }
     const user = await User.findById(data.userId);
     const item = user.collections
-      .map((collection) => collection.item.id(id))
-      .filter((item) => item !== null);
+      .flatMap((collection) => collection.item)
+      .id(id);
 
     if (!item) {
       return res.status(404).json({ error: "Item not found!" });
