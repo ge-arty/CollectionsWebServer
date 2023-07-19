@@ -167,7 +167,10 @@ const updateItem = expressAsyncHandler(async (req, res) => {
       return res.status(400).json({ error: "Not enough info about item!" });
     }
     const user = await User.findById(data.userId);
-    const item = user.collections.map((collection) => collection.item.id(id));
+    const item = user.collections
+      .map((collection) => collection.item.id(id))
+      .filter((item) => item !== null);
+
     if (!item) {
       return res.status(404).json({ error: "Item not found!" });
     }
@@ -176,7 +179,6 @@ const updateItem = expressAsyncHandler(async (req, res) => {
     item.date = data.date || item.date;
     item.description = data.description || item.description;
 
-    // If you have customFields in your item schema, update them here
     if (data.customFields && Array.isArray(data.customFields)) {
       item.customFields = data.customFields;
     }
