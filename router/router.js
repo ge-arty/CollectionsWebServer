@@ -21,6 +21,7 @@ authRoutes.get("/user/:id", jwtMiddleware, getUser);
 authRoutes.post("/createCollection", jwtMiddleware, createCollection);
 // Remove Collection
 authRoutes.delete("/collection/:id", jwtMiddleware, deleteCollection);
+// Create Item
 authRoutes.post("/createItem/:id", jwtMiddleware, createItem);
 // -----------------------
 

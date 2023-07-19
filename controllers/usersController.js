@@ -143,16 +143,13 @@ const createItem = expressAsyncHandler(async (req, res) => {
       (collection) => collection._id === collectionId
     );
     if (!foundCollection) {
-      return res
-        .status(404)
-        .json({ error: "Collection not found in the user's collections!" });
+      return res.status(404).json(user.collections);
     }
 
     foundCollection.item.push(data);
 
     await user.save();
     return res.status(201).json({
-      collection: user.collections[user.collections.length - 1],
       message: "Collection has been created!",
     });
   } catch (error) {
