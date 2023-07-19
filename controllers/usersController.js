@@ -171,7 +171,7 @@ const updateItem = expressAsyncHandler(async (req, res) => {
     if (!item) {
       return res.status(404).json({ error: "Item not found!" });
     }
-
+    console.log(item);
     item.name = data.name || item.name;
     item.date = data.date || item.date;
     item.description = data.description || item.description;
