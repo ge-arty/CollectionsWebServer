@@ -141,7 +141,7 @@ const createItem = expressAsyncHandler(async (req, res) => {
     }
 
     const ObjectId = mongoose.Types.ObjectId;
-    const collectionId = new ObjectId(ObjectId);
+    const collectionId = new ObjectId(id);
     const foundCollection = user.collections.find(
       (collection) => collection._id == collectionId
     );
