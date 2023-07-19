@@ -131,6 +131,7 @@ const deleteCollection = expressAsyncHandler(async (req, res) => {
 const createItem = expressAsyncHandler(async (req, res) => {
   try {
     const { collectionId } = req.params;
+    console.log(req.params);
     const data = req.body;
     if (!data) {
       return res.status(400).json({ error: "Not enough info about item!" });
