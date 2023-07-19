@@ -71,13 +71,34 @@ const userLogin = expressAsyncHandler(async (req, res) => {
 
 // Get User By Id
 const getUser = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
-  validateMongoId(id);
   try {
+    const { id } = req.params;
+    validateMongoId(id);
+
     const myProfile = await User.findById(id);
     res.json(myProfile);
   } catch (error) {
     res.json(error);
+  }
+});
+// Get collection by id
+const getCollection = expressAsyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    validateMongoId(id);
+    const users = await User.find({});
+    const allCollections = users.reduce((collections, user) => {
+      return collections.concat(user.collections);
+    }, []);
+    const collection = allCollections.id(id);
+
+    if (!collection) {
+      return res.status(404).json({ error: "Collection not found!" });
+    }
+
+    res.json({ collection });
+  } catch (error) {
+    res.status(500).json({ error: "Server internal error!" });
   }
 });
 
@@ -256,4 +277,5 @@ module.exports = {
   deleteCollection,
   updateItem,
   deleteItem,
+  getCollection,
 };
