@@ -90,14 +90,17 @@ const getCollection = expressAsyncHandler(async (req, res) => {
     const allCollections = users.reduce((collections, user) => {
       return collections.concat(user.collections);
     }, []);
-    console.log(allCollections);
-    const collection = allCollections.id(id);
-    console.log(collection);
-    if (!collection) {
+
+    const collection = allCollections
+      .map((collection) => collection.id(id))
+      .filter((collection) => collection !== null);
+    const result = collection[0];
+
+    if (!result) {
       return res.status(404).json({ error: "Collection not found!" });
     }
 
-    res.json({ collection });
+    return res.json({ result });
   } catch (error) {
     res.status(500).json({ error: "Server internal error!" });
   }
