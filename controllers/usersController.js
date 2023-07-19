@@ -93,7 +93,6 @@ const createCollection = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
     const result = await upload(data.image);
-    console.log(result);
     if (!result || !result.secure_url) {
       return res.status(500).json({ error: "Failed to upload image!" });
     }
@@ -128,6 +127,39 @@ const deleteCollection = expressAsyncHandler(async (req, res) => {
     return res.status(500).json({ error: "Server internal error!" });
   }
 });
+// Create Item
+const createItem = expressAsyncHandler(async (req, res) => {
+  try {
+    const { collectionId } = req.params;
+    const data = req.body;
+    if (!data) {
+      return res.status(400).json({ error: "Not enough info about item!" });
+    }
+    const user = await User.findById(data.userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+    const foundCollection = user.collections.find(
+      (collection) => collection._id === collectionId
+    );
+    if (!foundCollection) {
+      return res
+        .status(404)
+        .json({ error: "Collection not found in the user's collections!" });
+    }
+
+    foundCollection.item.push(data);
+
+    await user.save();
+    return res.status(201).json({
+      collection: user.collections[user.collections.length - 1],
+      message: "Collection has been created!",
+    });
+  } catch (error) {
+    console.error("Failed to create Collection!:", error);
+    return res.status(500).json({ error: "Server internal error!" });
+  }
+});
 
 // ------------------------------------------
 
@@ -146,7 +178,7 @@ module.exports = {
   getAllUsers,
   getUser,
   userLogin,
-
+  createItem,
   createCollection,
   deleteCollection,
 };

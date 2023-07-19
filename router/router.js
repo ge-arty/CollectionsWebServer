@@ -4,6 +4,7 @@ const {
   createCollection,
   getUser,
   deleteCollection,
+  createItem,
 } = require("../controllers/usersController");
 const jwtMiddleware = require("../middlewares/jwtMiddleware");
 const express = require("express");
@@ -20,6 +21,7 @@ authRoutes.get("/user/:id", jwtMiddleware, getUser);
 authRoutes.post("/createCollection", jwtMiddleware, createCollection);
 // Remove Collection
 authRoutes.delete("/collection/:id", jwtMiddleware, deleteCollection);
+authRoutes.post("/createItem/:id", jwtMiddleware, createItem);
 // -----------------------
 
 module.exports = authRoutes;
