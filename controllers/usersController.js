@@ -131,7 +131,6 @@ const deleteCollection = expressAsyncHandler(async (req, res) => {
 const createItem = expressAsyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(req.params);
     const data = req.body;
     if (!data) {
       return res.status(400).json({ error: "Not enough info about item!" });
@@ -141,8 +140,9 @@ const createItem = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
     console.log(id);
+    const collectionId = mongoose.Types.ObjectId(id);
     const foundCollection = user.collections.find(
-      (collection) => collection._id === id
+      (collection) => collection._id === collectionId
     );
     if (!foundCollection) {
       return res
