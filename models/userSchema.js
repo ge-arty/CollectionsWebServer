@@ -11,6 +11,7 @@ const itemSchema = new mongoose.Schema({
   date: {
     type: Date,
   },
+  userId: Number,
   customFields: [customFieldSchema],
 });
 
