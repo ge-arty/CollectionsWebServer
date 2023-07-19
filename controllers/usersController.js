@@ -90,11 +90,13 @@ const getCollection = expressAsyncHandler(async (req, res) => {
     const allCollections = users.reduce((collections, user) => {
       return collections.concat(user.collections);
     }, []);
+    console.log(allCollections);
     const collection = allCollections.id(id);
 
     if (!collection) {
       return res.status(404).json({ error: "Collection not found!" });
     }
+    console.log(collection);
 
     res.json({ collection });
   } catch (error) {
