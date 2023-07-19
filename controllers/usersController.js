@@ -140,9 +140,8 @@ const createItem = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
     console.log(id);
-    console.log(typeof id);
-    console.log(user.collection[0]._id);
-    console.log(user.collection[0]);
+
+    console.log(typeof user.collections[0]._id);
     const foundCollection = user.collections.find(
       (collection) => collection._id.toString() === id
     );
