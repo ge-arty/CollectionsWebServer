@@ -170,6 +170,7 @@ const updateItem = expressAsyncHandler(async (req, res) => {
     const item = user.collections
       .flatMap((collection) => collection.item)
       .id(id);
+    console.log(item);
 
     if (!item) {
       return res.status(404).json({ error: "Item not found!" });
