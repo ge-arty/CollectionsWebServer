@@ -143,7 +143,7 @@ const createItem = expressAsyncHandler(async (req, res) => {
 
     console.log(typeof user.collections[0]._id);
     const foundCollection = user.collections.find(
-      (collection) => collection._id.toString() === id
+      (collection) => collection._id.toString() == id
     );
 
     if (!foundCollection) {
