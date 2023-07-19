@@ -7,6 +7,7 @@ const {
   createItem,
   updateItem,
   deleteItem,
+  getExploreInfo,
 } = require("../controllers/usersController");
 const jwtMiddleware = require("../middlewares/jwtMiddleware");
 const express = require("express");
@@ -29,6 +30,8 @@ authRoutes.put("/updateItem/:id", jwtMiddleware, updateItem);
 authRoutes.post("/createItem/:id", jwtMiddleware, createItem);
 // Delete Item
 authRoutes.delete(`/deleteItem/:id`, jwtMiddleware, deleteItem);
+// Latest Items and Biggest Collections
+authRoutes.get(`/exploreInfo`, getExploreInfo);
 // -----------------------
 
 module.exports = authRoutes;

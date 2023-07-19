@@ -215,13 +215,32 @@ const deleteItem = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// ------------------------------------------
-
-// Get All Users
-const getAllUsers = expressAsyncHandler(async (req, res) => {
+// Get Explore Info
+const getExploreInfo = expressAsyncHandler(async (req, res) => {
   try {
-    const allUsers = await User.find({});
-    res.json(allUsers);
+    const users = await User.find({});
+    // --------------------Biggest Collections
+    // Extract all collections from all users
+    const allCollections = users.reduce((collections, user) => {
+      return collections.concat(user.collections);
+    }, []);
+    // Sort collections in descending order based on their length (number of items)
+    const sortedCollections = allCollections.sort(
+      (a, b) => b.item.length - a.item.length
+    );
+    // Get the 6 biggest collections
+    const biggestCollections = sortedCollections.slice(0, 6);
+    // ----------------------------------------------------------------
+    const allItems = allCollections.reduce((items, collection) => {
+      return items.concat(collection.item);
+    }, []);
+
+    // Sort items in descending order based on their createdAt date (latest first)
+    const latestItems = allItems
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 6);
+
+    res.json({ biggestCollections, latestItems });
   } catch (error) {
     res.json(error);
   }
@@ -229,7 +248,7 @@ const getAllUsers = expressAsyncHandler(async (req, res) => {
 
 module.exports = {
   registerUser,
-  getAllUsers,
+  getExploreInfo,
   getUser,
   userLogin,
   createItem,
