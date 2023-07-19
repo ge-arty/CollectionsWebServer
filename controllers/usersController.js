@@ -147,7 +147,6 @@ const createItem = expressAsyncHandler(async (req, res) => {
         .status(404)
         .json({ error: "Collection not found in the user's collections!" });
     }
-    console.log(collection);
     collection.item.push(data);
 
     await user.save();
@@ -156,6 +155,39 @@ const createItem = expressAsyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.error("Failed to create Collection!:", error);
+    return res.status(500).json({ error: "Server internal error!" });
+  }
+});
+// Update Item
+const updateItem = expressAsyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    if (!data) {
+      return res.status(400).json({ error: "Not enough info about item!" });
+    }
+    const user = await User.findById(data.userId);
+    const item = user.collections.map((collection) => collection.item.id(id));
+    if (!item) {
+      return res.status(404).json({ error: "Item not found!" });
+    }
+
+    item.name = data.name || item.name;
+    item.date = data.date || item.date;
+    item.description = data.description || item.description;
+
+    // If you have customFields in your item schema, update them here
+    if (data.customFields && Array.isArray(data.customFields)) {
+      item.customFields = data.customFields;
+    }
+
+    // Save the updated item to the database
+    const updatedItem = await user.save();
+
+    // Return the updated item in the response
+    return res.status(200).json(updatedItem);
+  } catch (error) {
+    console.error("Failed to update item:", error);
     return res.status(500).json({ error: "Server internal error!" });
   }
 });
@@ -180,4 +212,5 @@ module.exports = {
   createItem,
   createCollection,
   deleteCollection,
+  updateItem,
 };
