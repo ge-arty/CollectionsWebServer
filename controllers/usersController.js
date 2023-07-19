@@ -95,7 +95,8 @@ const getCollection = expressAsyncHandler(async (req, res) => {
       .map((collection) => collection.id(id))
       .filter((collection) => collection !== null);
     const result = collection[0];
-
+    console.log(collection[0]);
+    console.log(result);
     if (!result) {
       return res.status(404).json({ error: "Collection not found!" });
     }
