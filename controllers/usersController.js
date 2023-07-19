@@ -139,8 +139,11 @@ const createItem = expressAsyncHandler(async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found!" });
     }
+
+    const ObjectId = mongoose.Types.ObjectId;
+    const collectionId = new ObjectId(ObjectId);
     const foundCollection = user.collections.find(
-      (collection) => collection._id == id
+      (collection) => collection._id == collectionId
     );
 
     if (!foundCollection) {
