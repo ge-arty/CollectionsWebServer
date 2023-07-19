@@ -13,6 +13,10 @@ const itemSchema = new mongoose.Schema({
   },
   userId: String,
   customFields: [customFieldSchema],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const collectionSchema = new mongoose.Schema({
