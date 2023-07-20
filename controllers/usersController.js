@@ -304,7 +304,7 @@ const blockControl = expressAsyncHandler(async (req, res) => {
   try {
     const { id, block } = req.body;
     const user = await User.findById(id);
-    user.block = block;
+    user.block = !block;
     await user.save();
     res.json({ message: "User status updated successfully" });
   } catch (err) {
