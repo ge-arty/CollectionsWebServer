@@ -53,7 +53,6 @@ const userLogin = expressAsyncHandler(async (req, res) => {
 
     // Generating Token
     const token = generateToken(userFound._id);
-
     res.cookie("token", token, { httpOnly: true });
 
     const transporter = nodemailer.createTransport({
