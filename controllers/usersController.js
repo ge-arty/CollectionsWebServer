@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const expressAsyncHandler = require("express-async-handler");
 const validateMongoId = require("../utils/validateMongoId");
 const generateToken = require("../configs/JWTtoken");
-const mongoose = require("mongoose");
 const upload = require("../configs/cloudinary");
 
 // Register User
@@ -29,7 +28,6 @@ const registerUser = expressAsyncHandler(async (req, res) => {
     res.status(400).json({ current, message });
   }
 });
-
 // Login
 const userLogin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -68,7 +66,6 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 // Get User By Id
 const getUser = expressAsyncHandler(async (req, res) => {
   try {
@@ -94,7 +91,6 @@ const getCollections = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ error: "Server internal error!" });
   }
 });
-
 // createCollection
 const createCollection = expressAsyncHandler(async (req, res) => {
   try {
@@ -228,7 +224,6 @@ const deleteItem = expressAsyncHandler(async (req, res) => {
     return res.status(500).json({ error: "Server internal error!" });
   }
 });
-
 // Get Explore Info
 const getExploreInfo = expressAsyncHandler(async (req, res) => {
   try {
