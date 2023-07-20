@@ -254,6 +254,7 @@ const getExploreInfo = expressAsyncHandler(async (req, res) => {
     res.json(error);
   }
 });
+// Get Users List for Admin
 const getUsersList = expressAsyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
