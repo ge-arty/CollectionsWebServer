@@ -57,7 +57,9 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     res.cookie("token", token, { httpOnly: true });
 
     const transporter = nodemailer.createTransport({
-      service: "Mail",
+      host: "smtp.mail.ru",
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.EMAIL_PASSWORD,
@@ -94,7 +96,6 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ message: `Error: ${error.message}` });
   }
 });
-
 // Get User By Id
 const getUser = expressAsyncHandler(async (req, res) => {
   try {
