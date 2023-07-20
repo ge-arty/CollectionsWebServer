@@ -54,7 +54,7 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     // Generating Token
     const token = generateToken(userFound._id);
     res.cookie("token", token, { httpOnly: true });
-    console.log(process.env.EMAIL_PASSWORD);
+
     const transporter = nodemailer.createTransport({
       host: "smtp.mail.ru",
       port: 587,
