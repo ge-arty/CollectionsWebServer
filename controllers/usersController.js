@@ -66,7 +66,7 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     });
 
     const mailOptions = {
-      from: "george.arutinyan@gmail.com",
+      from: process.env.EMAIL,
       to: userFound.email,
       subject: "Login Notification",
       text: "You have successfully logged in.",
