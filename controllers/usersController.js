@@ -31,7 +31,6 @@ const registerUser = expressAsyncHandler(async (req, res) => {
   }
 });
 // Login
-
 const userLogin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -58,7 +57,7 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     res.cookie("token", token, { httpOnly: true });
 
     const transporter = nodemailer.createTransport({
-      service: "Gmail",
+      service: "Mail",
       auth: {
         user: process.env.EMAIL,
         pass: process.env.EMAIL_PASSWORD,
