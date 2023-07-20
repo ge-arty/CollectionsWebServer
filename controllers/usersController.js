@@ -4,6 +4,8 @@ const expressAsyncHandler = require("express-async-handler");
 const validateMongoId = require("../utils/validateMongoId");
 const generateToken = require("../configs/JWTtoken");
 const upload = require("../configs/cloudinary");
+const nodemailer = require("nodemailer");
+const dotenv = require("dotenv").config();
 
 // Register User
 const registerUser = expressAsyncHandler(async (req, res) => {
@@ -29,6 +31,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
   }
 });
 // Login
+
 const userLogin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -52,8 +55,31 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     // Generating Token
     const token = generateToken(userFound._id);
 
-    // Cookie HttpOnly
     res.cookie("token", token, { httpOnly: true });
+
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: "george.arutinyan@gmail.com",
+      to: userFound.email,
+      subject: "Login Notification",
+      text: "You have successfully logged in.",
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error sending email:", error);
+      } else {
+        console.log("Email sent:", info.response);
+      }
+    });
+
     res.json({
       _id: userFound._id,
       firstName: userFound.firstName,
@@ -69,6 +95,7 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ message: `Error: ${error.message}` });
   }
 });
+
 // Get User By Id
 const getUser = expressAsyncHandler(async (req, res) => {
   try {
