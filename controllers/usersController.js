@@ -292,7 +292,7 @@ const adminControl = expressAsyncHandler(async (req, res) => {
   try {
     const { id, admin } = req.body;
     const user = await User.findById(id);
-    user.admin = !admin; // Используем обратное значение для нового статуса
+    user.admin = !admin;
     await user.save();
     res.json({ message: "Admin status updated successfully" });
   } catch (err) {
@@ -302,9 +302,9 @@ const adminControl = expressAsyncHandler(async (req, res) => {
 // Block or unBlock User
 const blockControl = expressAsyncHandler(async (req, res) => {
   try {
-    const { id, blocked } = req.body;
+    const { id, block } = req.body;
     const user = await User.findById(id);
-    user.block = blocked; // Используем обратное значение для нового статуса
+    user.block = block;
     await user.save();
     res.json({ message: "User status updated successfully" });
   } catch (err) {
