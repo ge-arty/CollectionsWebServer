@@ -18,7 +18,7 @@ const jwtMiddleware = require("../middlewares/jwtMiddleware");
 const express = require("express");
 
 const authRoutes = express.Router();
-
+// --------------------------------------------
 // Register route
 authRoutes.post("/register", registerUser);
 // User Login
@@ -47,6 +47,6 @@ authRoutes.delete(`/deleteUser`, jwtMiddleware, deleteUser);
 authRoutes.put(`/admin`, jwtMiddleware, adminControl);
 // Block state control
 authRoutes.put(`/block`, jwtMiddleware, blockControl);
-// -----------------------
+// --------------------------------------
 
 module.exports = authRoutes;
