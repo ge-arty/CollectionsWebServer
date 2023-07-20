@@ -254,6 +254,24 @@ const getExploreInfo = expressAsyncHandler(async (req, res) => {
     res.json(error);
   }
 });
+const getUsersList = expressAsyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.admin) {
+      const users = await User.find({});
+      return res.json(users);
+    } else {
+      return res.json(user);
+    }
+  } catch (err) {
+    res.status(500).json({ message: `Error: ${err.message}` });
+  }
+});
+// ----------------------- Admin methods
 
 module.exports = {
   registerUser,
@@ -266,4 +284,5 @@ module.exports = {
   updateItem,
   deleteItem,
   getCollections,
+  getUsersList,
 };
