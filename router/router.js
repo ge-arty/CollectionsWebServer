@@ -10,6 +10,9 @@ const {
   getExploreInfo,
   getCollections,
   getUsersList,
+  deleteUser,
+  adminControl,
+  blockControl,
 } = require("../controllers/usersController");
 const jwtMiddleware = require("../middlewares/jwtMiddleware");
 const express = require("express");
@@ -38,6 +41,12 @@ authRoutes.delete(`/deleteItem/:id`, jwtMiddleware, deleteItem);
 authRoutes.get(`/exploreInfo`, getExploreInfo);
 // Get All Users
 authRoutes.get(`/users/:id`, jwtMiddleware, getUsersList);
+// Delete User
+authRoutes.delete(`/deleteUser`, jwtMiddleware, deleteUser);
+// Admin state control
+authRoutes.put(`/admin`, jwtMiddleware, adminControl);
+// Block state control
+authRoutes.put(`/block`, jwtMiddleware, blockControl);
 // -----------------------
 
 module.exports = authRoutes;

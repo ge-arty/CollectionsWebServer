@@ -31,39 +31,42 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 // Login
 const userLogin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body);
   try {
     const userFound = await User.findOne({ email });
     if (!userFound) {
-      res.status(401);
-      throw new Error("Account doesn't exist");
+      res.status(401).json({ message: "Account doesn't exist" });
+      return;
     }
+
     const isPasswordMatched = await userFound.isPasswordMatched(password);
-    if (isPasswordMatched) {
-      await userFound.save();
-
-      // Generating Token
-      const token = generateToken(userFound._id);
-
-      // Cookie HttpOnly
-      res.cookie("token", token, { httpOnly: true });
-      res.json({
-        _id: userFound._id,
-        firstName: userFound.firstName,
-        lastName: userFound.lastName,
-        email: userFound.email,
-        password: userFound.password,
-        online: userFound.online,
-        admin: userFound.admin,
-        createdAt: userFound.createdAt,
-        token: token,
-      });
-    } else {
-      res.status(401);
-      throw new Error("Login failed, incorrect password");
+    if (!isPasswordMatched) {
+      res.status(401).json({ message: "Login failed, incorrect password" });
+      return;
     }
+
+    if (userFound.block) {
+      res.status(403).json({ message: "Account is blocked" });
+      return;
+    }
+
+    // Generating Token
+    const token = generateToken(userFound._id);
+
+    // Cookie HttpOnly
+    res.cookie("token", token, { httpOnly: true });
+    res.json({
+      _id: userFound._id,
+      firstName: userFound.firstName,
+      lastName: userFound.lastName,
+      email: userFound.email,
+      password: userFound.password,
+      online: userFound.online,
+      admin: userFound.admin,
+      createdAt: userFound.createdAt,
+      token: token,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: `Error: ${error.message}` });
   }
 });
 // Get User By Id
@@ -120,9 +123,9 @@ const createCollection = expressAsyncHandler(async (req, res) => {
 });
 // Remove Collection
 const deleteCollection = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const userId = req.body.userId;
   try {
+    const { id } = req.params;
+    const userId = req.body.userId;
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found!" });
@@ -272,7 +275,42 @@ const getUsersList = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ message: `Error: ${err.message}` });
   }
 });
+
 // ----------------------- Admin methods
+//  Delete User
+const deleteUser = expressAsyncHandler(async (req, res) => {
+  try {
+    const { id } = req.body;
+    await User.findByIdAndDelete(id);
+    res.json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+// Make or Remove Admin
+const adminControl = expressAsyncHandler(async (req, res) => {
+  try {
+    const { id, admin } = req.body;
+    const user = await User.findById(id);
+    user.admin = !admin; // Используем обратное значение для нового статуса
+    await user.save();
+    res.json({ message: "Admin status updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+// Block or unBlock User
+const blockControl = expressAsyncHandler(async (req, res) => {
+  try {
+    const { id, blocked } = req.body;
+    const user = await User.findById(id);
+    user.block = blocked; // Используем обратное значение для нового статуса
+    await user.save();
+    res.json({ message: "User status updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = {
   registerUser,
@@ -286,4 +324,7 @@ module.exports = {
   deleteItem,
   getCollections,
   getUsersList,
+  deleteUser,
+  adminControl,
+  blockControl,
 };
